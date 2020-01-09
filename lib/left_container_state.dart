@@ -1,9 +1,11 @@
 class LeftContainerState {
-  final String title = 'left';
+  final String _title = 'left';
+  String get title => _title;
+
+
   LeftContainerState.origin(){
     loadOriginData();
   }
-
 
   void loadMoreData(){
     //load data
