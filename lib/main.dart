@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/left_container_state.dart';
-import 'package:flutter_app/right_container_state.dart';
+import 'package:flutter_app/container_state.dart';
+import 'package:flutter_app/page_one.dart';
+import 'package:flutter_app/page_two.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
 void main() => runApp(MyApp());
@@ -28,7 +29,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
+    with
+        SingleTickerProviderStateMixin,
+        AutomaticKeepAliveClientMixin<MyHomePage> {
   TabController _tabController;
 
   @override
@@ -53,54 +56,8 @@ class _MyHomePageState extends State<MyHomePage>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          Injector(
-            initState: () {
-//              print('left initState');
-            },
-            inject: [
-              Inject<LeftContainerState>(
-                () => LeftContainerState.origin(),
-              )
-            ],
-            builder: (context) {
-              final ReactiveModel<LeftContainerState> modelRm =
-                  Injector.getAsReactive<LeftContainerState>();
-              return InkWell(
-                onTap: (){
-                  modelRm.state.loadMoreData();
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  color: Colors.lightGreen,
-                  child: Text(modelRm.state.title),
-                ),
-              );
-            },
-          ),
-          Injector(
-            initState: () {
-//              print('right initState');
-            },
-            inject: [
-              Inject<RightContainerState>(
-                () => RightContainerState.origin(),
-              )
-            ],
-            builder: (context) {
-              final ReactiveModel<RightContainerState> modelRm =
-                  Injector.getAsReactive<RightContainerState>();
-              return InkWell(
-                onTap: (){
-                  modelRm.state.loadMoreData();
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  color: Colors.lightGreen,
-                  child: Text(modelRm.state.title),
-                ),
-              );
-            },
-          ),
+          PageOne(),
+          PageTwo(),
         ],
       ),
 
@@ -111,4 +68,8 @@ class _MyHomePageState extends State<MyHomePage>
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
